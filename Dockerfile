@@ -20,5 +20,5 @@ VOLUME ["/CEImages"]
 ENV CE_IMAGE_DIR '/CEImages'
 ENV COS_BUCKET_PREFIX 'volterra-ce'
 
-ENTRYPOINT [ "/ibmcloud_cos_image_uploader/ibmcloud_cos_image_uploader.py" ]
+ENTRYPOINT [ "/ibmcloud_volterra_ce_uploader/ibmcloud_cos_image_uploader.py" ]
 
