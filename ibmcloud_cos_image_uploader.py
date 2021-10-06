@@ -26,6 +26,7 @@ import sys
 import time
 import datetime
 import logging
+import hashlib
 import json
 import ibm_boto3
 import requests
@@ -214,15 +215,28 @@ def assure_cos_bucket(image_path, location):
         return assure_bucket(bucket_name, location)
 
 
+def generate_md5sum(disk_image):
+    """Create MD5 sum file for the disk image"""
+    md5_file_path = "%s.md5" % disk_image
+    LOG.info('creating md5sum file for %s as %s', disk_image, md5_file_path)
+    md5_hash = hashlib.md5()
+    with open(disk_image, 'rb') as di:
+        for block in iter(lambda: di.read(4096), b''):
+            md5_hash.update(block)
+        with open(md5_file_path, 'w+') as md5sum:
+            md5sum.write(md5_hash.hexdigest())
+
+
 def assure_cos_object(image_path, location):
     """assure patch image object"""
     bucket_name = get_bucket_name(location)
     object_name = get_object_name(image_path)
     if re.search(IMAGE_MATCH, object_name):
         md5_path = "%s.md5" % image_path
-        if os.path.exists(md5_path):
-            md5_object_name = "%s.md5" % object_name
-            assure_object(md5_path, bucket_name, md5_object_name, location)
+        if not os.path.exists(md5_path):
+            generate_md5sum(image_path)
+        md5_object_name = "%s.md5" % object_name
+        assure_object(md5_path, bucket_name, md5_object_name, location)
         sig_path = "%s.384.sig" % image_path
         if os.path.exists(sig_path):
             sig_object_name = "%s.384.sig" % object_name
