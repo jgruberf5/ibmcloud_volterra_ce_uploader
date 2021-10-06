@@ -577,7 +577,7 @@ def inventory():
     UPDATE_IMAGES = True
     for location in IBM_COS_REGIONS:
         bucket_name = "%s-%s" % (COS_BUCKET_PREFIX, location)
-        public_url = "https://%s.s3.%s.cloud-object-storage.appdomain.cloud/volterra-ce-image-catalog.json" % (
+        public_url = "https://%s.s3.%s.cloud-object-storage.appdomain.cloud/volterra-image-catalog.json" % (
             bucket_name, location)
         LOG.debug('writing image catalog to: %s', public_url)
         assure_bucket(bucket_name, location)
