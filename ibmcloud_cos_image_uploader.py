@@ -97,14 +97,12 @@ def get_ce_images(ce_image_dir):
     """get Volterra CE patched disk images"""
     return_image_files = []
     LOG.debug('searching for images in %s', ce_image_dir)
-    for patched_dir in os.listdir(ce_image_dir):
-        patched_dir_path = "%s/%s" % (ce_image_dir, patched_dir)
-        if os.path.isdir(patched_dir_path):
-            for patched_image in os.listdir(patched_dir_path):
-                if os.path.splitext(patched_image)[1] in IMAGE_TYPES:
-                    image_filepath = "%s/%s" % (patched_dir_path,
-                                                patched_image)
-                    return_image_files.append(image_filepath)
+    for ce_image in os.listdir(ce_image_dir):
+        print(ce_image)
+        if os.path.splitext(ce_image)[1] in IMAGE_TYPES:
+            image_filepath = "%s/%s" % (ce_image_dir,
+                                        ce_image)
+        return_image_files.append(image_filepath)
     return return_image_files
 
 
