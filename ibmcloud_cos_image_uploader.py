@@ -554,8 +554,7 @@ def inventory():
                     for obj in cos_res.Bucket(bucket.name).objects.all():
                         LOG.debug('inventory add %s/%s', bucket.name, obj.key)
                         if os.path.splitext(obj.key)[1] in IMAGE_TYPES:
-                            image_name = bucket.name.replace(
-                                "%s-" % COS_BUCKET_PREFIX, '').replace('.', '-')
+                            image_name = image_name = obj.key.replace('.', '-')
                             cos_url = "cos://%s/%s/%s" % (location,
                                                           bucket.name, obj.key)
                             cos_md5_url = "cos://%s/%s/%s.md5" % (
