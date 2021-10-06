@@ -102,7 +102,7 @@ def get_ce_images(ce_image_dir):
         if os.path.splitext(ce_image)[1] in IMAGE_TYPES:
             image_filepath = "%s/%s" % (ce_image_dir,
                                         ce_image)
-        return_image_files.append(image_filepath)
+            return_image_files.append(image_filepath)
     return return_image_files
 
 
