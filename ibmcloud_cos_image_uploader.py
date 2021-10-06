@@ -581,7 +581,7 @@ def inventory():
             bucket_name, location)
         LOG.debug('writing image catalog to: %s', public_url)
         assure_bucket(bucket_name, location)
-        assure_object(inventory_file, bucket_name, "volterra-ce-image-catalog.json",
+        assure_object(inventory_file, bucket_name, "volterra-image-catalog.json",
                       location)
     UPDATE_IMAGES = old_update_images
 
