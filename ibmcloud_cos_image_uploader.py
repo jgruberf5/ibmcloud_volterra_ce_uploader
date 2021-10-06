@@ -256,8 +256,7 @@ def delete_all():
                         for obj in cos_res.Bucket(bucket.name).objects.all():
                             if re.search(IMAGE_MATCH, obj.key):
                                 LOG.debug('deleting object: %s', obj.key)
-                                image_name = bucket.name.replace(
-                                    "%s-" % COS_BUCKET_PREFIX, '').replace('.', '-')
+                                image_name = obj.key.replace('.', '-')
                                 cos_url = "cos://%s/%s/%s" % (
                                     location, bucket.name, obj.key)
                                 LOG.debug('removing public image %s in %s from url %s' % (
@@ -517,8 +516,7 @@ def assure_public_images():
                 if location in bucket.name:
                     for obj in cos_res.Bucket(bucket.name).objects.all():
                         if os.path.splitext(obj.key)[1] in IMAGE_TYPES:
-                            image_name = bucket.name.replace(
-                                "%s-" % COS_BUCKET_PREFIX, '').replace('.', '-')
+                            image_name = obj.key.replace('.', '-')
                             cos_url = "cos://%s/%s/%s" % (location,
                                                           bucket.name, obj.key)
                             LOG.debug('assuring public image %s in %s from url %s' % (
