@@ -98,7 +98,6 @@ def get_ce_images(ce_image_dir):
     return_image_files = []
     LOG.debug('searching for images in %s', ce_image_dir)
     for ce_image in os.listdir(ce_image_dir):
-        print(ce_image)
         if os.path.splitext(ce_image)[1] in IMAGE_TYPES:
             image_filepath = "%s/%s" % (ce_image_dir,
                                         ce_image)
@@ -106,18 +105,14 @@ def get_ce_images(ce_image_dir):
     return return_image_files
 
 
-def get_bucket_name(image_path, location):
+def get_bucket_name(location):
     """Get bucket for this patched image"""
-    return "%s-%s-%s" % (
-        COS_BUCKET_PREFIX,
-        os.path.splitext(
-            os.path.dirname(image_path.replace(CE_IMAGE_DIR, '')).replace(
-                os.path.sep, ''))[0].replace('_', '-').lower(), location)
+    return "%s-%s" % (COS_BUCKET_PREFIX, location)
 
 
-def get_object_name(image_path, location):
+def get_object_name(image_path):
     """Get object name for this patched image"""
-    return os.path.dirname(image_path.replace(CE_IMAGE_DIR, '')).replace(os.path.sep, '')
+    return os.path.basename(image_path)
 
 
 def get_cos_client(location):
@@ -213,16 +208,16 @@ def assure_object(file_path, bucket_name, object_name, location):
 
 def assure_cos_bucket(image_path, location):
     """assure patch image bucket"""
-    bucket_name = get_bucket_name(image_path, location)
-    object_name = get_object_name(image_path, location)
+    bucket_name = get_bucket_name(location)
+    object_name = get_object_name(image_path)
     if re.search(IMAGE_MATCH, object_name):
         return assure_bucket(bucket_name, location)
 
 
 def assure_cos_object(image_path, location):
     """assure patch image object"""
-    bucket_name = get_bucket_name(image_path, location)
-    object_name = get_object_name(image_path, location)
+    bucket_name = get_bucket_name(location)
+    object_name = get_object_name(image_path)
     if re.search(IMAGE_MATCH, object_name):
         md5_path = "%s.md5" % image_path
         if os.path.exists(md5_path):
@@ -276,7 +271,7 @@ def delete_all():
             LOG.error('exception occurred deleting all resources: %s', ex)
 
 
-def upload_patched_images():
+def upload_images():
     """check for images and assure upload to IBM COS"""
     LOG.debug('uploading images to %s', IBM_COS_REGIONS)
     # Just do an interation to serially create buckets
@@ -651,7 +646,7 @@ if __name__ == "__main__":
     if DELETE_ALL:
         delete_all()
     else:
-        upload_patched_images()
+        upload_images()
     if PUBLIC_IMAGES:
         assure_public_images()
     if INVENTORY:
