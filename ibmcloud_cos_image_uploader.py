@@ -49,7 +49,7 @@ COS_IMAGE_LOCATION = None
 COS_AUTH_ENDPOINT = None
 COS_ENDPOINT = None
 
-COS_BUCKET_PREFIX = 'volterra-ce'
+COS_BUCKET_PREFIX = 'f5xc-ce'
 
 IC_API_KEY = None
 IC_RESOURCE_GROUP = 'default'
@@ -66,7 +66,7 @@ DELETE_ALL = None
 PUBLIC_IMAGES = None
 INVENTORY = None
 
-LOG = logging.getLogger('ibmcloud_cos_image_uploader')
+LOG = logging.getLogger('ibmcloud_f5xe_cos_image_uploader')
 LOG.setLevel(logging.DEBUG)
 FORMATTER = logging.Formatter(
     '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -581,11 +581,11 @@ def inventory():
     UPDATE_IMAGES = True
     for location in IBM_COS_REGIONS:
         bucket_name = "%s-%s" % (COS_BUCKET_PREFIX, location)
-        public_url = "https://%s.s3.%s.cloud-object-storage.appdomain.cloud/volterra-image-catalog.json" % (
+        public_url = "https://%s.s3.%s.cloud-object-storage.appdomain.cloud/f5xc-ce-image-catalog.json" % (
             bucket_name, location)
         LOG.debug('writing image catalog to: %s', public_url)
         assure_bucket(bucket_name, location)
-        assure_object(inventory_file, bucket_name, "volterra-image-catalog.json",
+        assure_object(inventory_file, bucket_name, "f5xc-ce-image-catalog.json",
                       location)
     UPDATE_IMAGES = old_update_images
 
